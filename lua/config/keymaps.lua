@@ -3,6 +3,6 @@
 -- Add any additional keymaps here
 local map = vim.keymap.set
 
--- map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
+map("n", "<leader>ww", "<cmd>w<cr>", { desc = "Save" })
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
