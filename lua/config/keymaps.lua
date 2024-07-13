@@ -2,6 +2,11 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 local map = vim.keymap.set
+local del = vim.keymap.del
+
+-- Delete defaults
+del("n", "<leader>ft")
+del("n", "<leader>fT")
 
 map("n", "<leader>ww", "<cmd>w<cr>", { desc = "Save" })
 map("n", "<C-d>", "<C-d>zz")
