@@ -37,30 +37,28 @@ map("n", "<leader>p+", "<C-W>v", { desc = "Split window right", remap = true })
 map("n", "<leader>-", "<C-W>s", { desc = "Split window below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split window right", remap = true })
 map("n", "<leader>+", "<C-W>v", { desc = "Split window right", remap = true })
-map("n", "<leader>pm", function()
-  LazyVim.toggle.maximize()
-end, { desc = "Maximize Toggle" })
+map("n", "<leader>pm", function() LazyVim.toggle.maximize() end, { desc = "Maximize Toggle" })
 
 -- Spectre
-map("n", "<leader>ss", function()
-  require("spectre").open()
-end, { desc = "Spectre (search)" })
+map("n", "<leader>ss", function() require("spectre").open() end, { desc = "Spectre (search)" })
 
-map("n", "<leader>sf", function()
-  require("spectre").open_file_search()
-end, { desc = "Spectre (current file)" })
+map("n", "<leader>sf", function() require("spectre").open_file_search() end, { desc = "Spectre (current file)" })
 
-map("n", "<leader>sw", function()
-  require("spectre").open_visual({ select_word = true })
-end, { desc = "Spectre (current word)" })
+map(
+  "n",
+  "<leader>sw",
+  function() require("spectre").open_visual { select_word = true } end,
+  { desc = "Spectre (current word)" }
+)
 
 -- Sessions
-map("n", "<leader>Ss", function()
-  require("persistence").load()
-end, { desc = "Restore Session" })
-map("n", "<leader>Sl", function()
-  require("persistence").load({ last = true })
-end, { desc = "Restore Last Session" })
-map("n", "<leader>Sd", function()
-  require("persistence").stop()
-end, { desc = "Don't Save Current Session" })
+map("n", "<leader>Ss", function() require("persistence").load() end, { desc = "Restore Session" })
+map("n", "<leader>Sl", function() require("persistence").load { last = true } end, { desc = "Restore Last Session" })
+map("n", "<leader>Sd", function() require("persistence").stop() end, { desc = "Don't Save Current Session" })
+
+-- Nvim Ufo
+map("n", "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
+map("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
+map("n", "zr", function() require("ufo").openFoldsExceptKinds() end, { desc = "Fold less" })
+map("n", "zm", function() require("ufo").closeFoldsWith() end, { desc = "Fold more" })
+map("n", "zp", function() require("ufo").peekFoldedLinesUnderCursor() end, { desc = "Peek fold" })
