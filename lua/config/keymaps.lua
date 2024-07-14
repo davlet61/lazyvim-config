@@ -2,24 +2,24 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 local map = vim.keymap.set
-local del = vim.keymap.del
+local nomap = vim.keymap.del
 
 -- Delete defaults
-del("n", "<leader>qq")
-del("n", "<leader>ft")
-del("n", "<leader>fT")
-del("n", "<leader>ww")
-del("n", "<leader>wd")
-del("n", "<leader>wm")
-del("n", "<leader>w-")
-del("n", "<leader>w|")
-del("n", "<leader>-")
-del("n", "<leader>|")
-del("n", "<leader><Space>")
-del("n", "<leader>sw")
-del("n", "<leader>qs")
-del("n", "<leader>ql")
-del("n", "<leader>qd")
+nomap("n", "<leader>qq")
+nomap("n", "<leader>ft")
+nomap("n", "<leader>fT")
+nomap("n", "<leader>ww")
+nomap("n", "<leader>wd")
+nomap("n", "<leader>wm")
+nomap("n", "<leader>w-")
+nomap("n", "<leader>w|")
+nomap("n", "<leader>-")
+nomap("n", "<leader>|")
+-- nomap("n", "<leader><Space>")
+nomap("n", "<leader>sw")
+nomap("n", "<leader>qs")
+nomap("n", "<leader>ql")
+nomap("n", "<leader>qd")
 
 map("n", "<leader>q", "<Cmd>confirm q<CR>", { desc = "Quit Window" })
 map("n", "<leader>Q", "<Cmd>confirm qall<CR>", { desc = "Quit all" })
