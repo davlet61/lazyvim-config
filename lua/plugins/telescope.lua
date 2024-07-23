@@ -30,17 +30,13 @@ return {
     { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
     {
       "<leader>fw",
-      function()
-        require("telescope.builtin").live_grep({})
-      end,
+      function() require("telescope.builtin").live_grep {} end,
       desc = "Find Files",
     },
     -- add a keymap to browse plugin files
     {
       "<leader>fp",
-      function()
-        require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root })
-      end,
+      function() require("telescope.builtin").find_files { cwd = require("lazy.core.config").options.root } end,
       desc = "Find Plugin File",
     },
   },
