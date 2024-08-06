@@ -5,7 +5,7 @@ return {
     enable_diagnostics = true,
     filesystem = {
       filtered_items = {
-        visible = true, -- This is what you want: If you set this to `true`, all "hide" just mean "dimmed out"
+        visible = true,
         hide_dotfiles = false,
         hide_gitignored = true,
         hide_by_name = {
@@ -19,6 +19,15 @@ return {
     group_empty_dirs = true,
     window = {
       position = "right",
+    },
+    event_handlers = {
+      {
+        event = "neo_tree_buffer_enter",
+        handler = function()
+          vim.opt_local.cursorline = true
+          vim.api.nvim_set_hl(0, "NeotreeCursorLine", { bg = "#2a3834" })
+        end,
+      },
     },
   },
 }

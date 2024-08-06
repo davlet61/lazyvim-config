@@ -50,3 +50,6 @@ map("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close al
 map("n", "zr", function() require("ufo").openFoldsExceptKinds() end, { desc = "Fold less" })
 map("n", "zm", function() require("ufo").closeFoldsWith() end, { desc = "Fold more" })
 map("n", "zp", function() require("ufo").peekFoldedLinesUnderCursor() end, { desc = "Peek fold" })
+
+-- LSP
+map("n", "<M-r>l", "<Cmd>LspRestart<CR>", { desc = "LSP Restart" })
