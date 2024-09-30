@@ -4,18 +4,25 @@
 
 -- Simple function to get highlight groups
 local function get_hlgroup(name)
-  local ok, hl = pcall(vim.api.nvim_get_hl_by_name, name, true)
-  if not ok then
-    return {}
-  end
+  local hl = vim.api.nvim_get_hl(0, { name = name })
+
   return {
-    fg = hl.foreground and string.format("#%06x", hl.foreground) or nil,
-    bg = hl.background and string.format("#%06x", hl.background) or nil,
+    fg = hl.fg and string.format("#%06x", hl.fg) or nil,
+    bg = hl.bg and string.format("#%06x", hl.bg) or nil,
   }
 end
 
+-- local function get_hlgroup(name)
+--   local ok, hl = pcall(vim.api.nvim_get_hl_by_name, name, true)
+--   if not ok then return {} end
+--   return {
+--     fg = hl.foreground and string.format("#%06x", hl.foreground) or nil,
+--     bg = hl.background and string.format("#%06x", hl.background) or nil,
+--   }
+-- end
+
 local function setup_telescope_highlights()
-  local normal = get_hlgroup("Normal")
+  local normal = get_hlgroup "Normal"
   local fg, bg = normal.fg, normal.bg
   local green = get_hlgroup("String").fg
   local red = get_hlgroup("Error").fg

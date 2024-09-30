@@ -53,3 +53,13 @@ map("n", "zp", function() require("ufo").peekFoldedLinesUnderCursor() end, { des
 
 -- LSP
 map("n", "<M-r>l", "<Cmd>LspRestart<CR>", { desc = "LSP Restart" })
+
+-- Precognition
+function TogglePrecognition()
+  if require("precognition").toggle() then
+    vim.notify "Precognition on"
+  else
+    vim.notify "Precognition off"
+  end
+end
+map("n", "<leader>pr", TogglePrecognition, { desc = "Toggle Precognition" })
