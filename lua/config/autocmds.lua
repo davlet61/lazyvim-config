@@ -12,15 +12,6 @@ local function get_hlgroup(name)
   }
 end
 
--- local function get_hlgroup(name)
---   local ok, hl = pcall(vim.api.nvim_get_hl_by_name, name, true)
---   if not ok then return {} end
---   return {
---     fg = hl.foreground and string.format("#%06x", hl.foreground) or nil,
---     bg = hl.background and string.format("#%06x", hl.background) or nil,
---   }
--- end
-
 local function setup_telescope_highlights()
   local normal = get_hlgroup "Normal"
   local fg, bg = normal.fg, normal.bg
