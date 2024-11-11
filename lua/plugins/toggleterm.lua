@@ -3,7 +3,7 @@ return {
     "akinsho/toggleterm.nvim",
     version = "*",
     config = function()
-      require("toggleterm").setup({
+      require("toggleterm").setup {
         shade_terminals = true,
         highlights = {
           Normal = { link = "Normal" },
@@ -21,10 +21,8 @@ return {
           vim.opt_local.foldcolumn = "0"
           vim.opt_local.signcolumn = "no"
           if t.hidden then
-            local toggle = function()
-              t:toggle()
-            end
-            for _, key in ipairs({ "<C-'>", "<F7>" }) do
+            local toggle = function() t:toggle() end
+            for _, key in ipairs { "<C-'>", "<F7>" } do
               vim.keymap.set({ "n", "t", "i" }, key, toggle, { desc = "Toggle terminal", buffer = t.bufnr })
             end
           end
@@ -32,7 +30,39 @@ return {
         shading_factor = 2,
         direction = "float",
         float_opts = { border = "rounded" },
-      })
+      }
+
+      --- Merge extended options with a default table of options
+      ---@param default? table The default table that you want to merge into
+      ---@param opts? table The new options that should be merged with the default table
+      ---@return table # The merged table
+      local function extend_tbl(default, opts)
+        opts = opts or {}
+        return default and vim.tbl_deep_extend("force", default, opts) or opts
+      end
+
+      -- Toggle a user terminal if it exists, if not then create a new one and save it
+      ---@param opts string|table A terminal command string or a table of options for Terminal:new() (Check toggleterm.nvim documentation for table format)
+      local function toggle_term_cmd(opts)
+        local terms = {}
+        -- if a command string is provided, create a basic table for Terminal:new() options
+        if type(opts) == "string" then opts = { cmd = opts } end
+        opts = extend_tbl({ hidden = true }, opts)
+        local num = vim.v.count > 0 and vim.v.count or 1
+        -- if terminal doesn't exist yet, create it
+        if not terms[opts.cmd] then terms[opts.cmd] = {} end
+        if not terms[opts.cmd][num] then
+          if not opts.count then opts.count = vim.tbl_count(terms) * 100 + num end
+          local on_exit = opts.on_exit
+          opts.on_exit = function(...)
+            terms[opts.cmd][num] = nil
+            if on_exit then on_exit(...) end
+          end
+          terms[opts.cmd][num] = require("toggleterm.terminal").Terminal:new(opts)
+        end
+        -- toggle the terminal
+        terms[opts.cmd][num]:toggle()
+      end
 
       vim.keymap.set(
         "n",
@@ -51,6 +81,18 @@ return {
         "<leader>tf",
         "<cmd>ToggleTerm direction=float<cr>",
         { desc = "Terminal (float)", noremap = true, silent = true }
+      )
+      vim.keymap.set(
+        "n",
+        "<leader>td",
+        function() toggle_term_cmd "lazydocker" end,
+        { desc = "Docker (terminal)", noremap = true, silent = true }
+      )
+      vim.keymap.set(
+        "n",
+        "<leader>ts",
+        function() toggle_term_cmd "spf ." end,
+        { desc = "Toggle (superfile)", noremap = true, silent = true }
       )
     end,
   },
