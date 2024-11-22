@@ -20,6 +20,9 @@ nomap("n", "<leader>sw")
 nomap("n", "<leader>qs")
 nomap("n", "<leader>ql")
 nomap("n", "<leader>qd")
+-- Disable Snacks term keybindings
+nomap({ "n", "t" }, "<c-/>")
+nomap({ "n", "t" }, "<c-_>")
 
 map("n", "<leader>q", "<Cmd>confirm q<CR>", { desc = "Quit Window" })
 map("n", "<leader>Q", "<Cmd>confirm qall<CR>", { desc = "Quit all" })
@@ -37,7 +40,7 @@ map("n", "<leader>p+", "<C-W>v", { desc = "Split window right", remap = true })
 map("n", "<leader>-", "<C-W>s", { desc = "Split window below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split window right", remap = true })
 map("n", "<leader>+", "<C-W>v", { desc = "Split window right", remap = true })
-map("n", "<leader>pm", function() LazyVim.toggle.maximize() end, { desc = "Maximize Toggle" })
+-- map("n", "<leader>pm", function() Snacks.toggle() end, { desc = "Maximize Toggle" })
 
 -- Sessions
 map("n", "<leader>Ss", function() require("persistence").load() end, { desc = "Restore Session" })
