@@ -64,6 +64,14 @@ return {
         terms[opts.cmd][num]:toggle()
       end
 
+      vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+      vim.keymap.set(
+        "t",
+        "<Esc>q",
+        '<C-\\><C-n><cmd>lua require("toggleterm").toggle()<CR>',
+        { desc = "Toggle terminal mode" }
+      )
+
       vim.keymap.set(
         "n",
         "<Leader>th",
