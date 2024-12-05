@@ -47,3 +47,90 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 -- Also call the function immediately to apply the highlights on startup
 setup_telescope_highlights()
+
+-- Send filetype to title (for Wezterm)
+vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
+  callback = function()
+    local filetype = vim.bo.filetype
+    -- List of filetypes to ignore
+    local ignore_filetypes = {
+      "noice",
+      "notify",
+      "notifier",
+      "TelescopePrompt",
+      "lazy",
+      "mason",
+      "help",
+      "qf",
+      "NvimTree",
+      "snacks_notif",
+      "snacks_win_backdrop",
+      "TelescopeResults",
+      "",
+    }
+    for _, ignored in ipairs(ignore_filetypes) do
+      if filetype == ignored then return end
+    end
+    vim.opt.title = true
+    vim.opt.titlestring = filetype
+    -- Snacks.notifier.notify("FileType => " .. filetype, "info")
+  end,
+})
+local function normalize_path(path)
+  -- Get current working directory
+  local cwd = vim.fn.getcwd()
+  -- Make path relative to cwd
+  return vim.fn.fnamemodify(path, ":p"):gsub(cwd .. "/", "")
+end
+
+local function add_all_buffers_to_harpoon()
+  local harpoon = require "harpoon"
+
+  -- Get list of all buffers
+  local buffers = vim.api.nvim_list_bufs()
+
+  for _, buf in ipairs(buffers) do
+    -- Check if buffer is loaded and valid
+    if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_is_valid(buf) then
+      local bufname = vim.api.nvim_buf_get_name(buf)
+      -- Only add if it's a real file and not a harpoon UI buffer
+      if bufname and bufname ~= "" and not string.match(bufname, "harpoon") then harpoon:list():add() end
+    end
+  end
+end
+
+-- Create autocmd to remove deleted buffers from harpoon
+vim.api.nvim_create_autocmd("BufDelete", {
+  callback = function(ev)
+    local harpoon = require "harpoon"
+    local bufname = vim.api.nvim_buf_get_name(ev.buf)
+
+    if bufname and bufname ~= "" and not string.match(bufname, "harpoon") then
+      local normalized_bufname = normalize_path(bufname)
+      local list = harpoon:list()
+      local items = list:display()
+      for idx, item in ipairs(items) do
+        if item == normalized_bufname then
+          local item_to_remove = list:get(idx)
+          list:remove(item_to_remove)
+          break
+        end
+      end
+    end
+  end,
+})
+
+-- Create a command to call the add function
+vim.api.nvim_create_user_command("HarpoonAddAll", add_all_buffers_to_harpoon, {})
+
+-- Auto-add new buffers to harpoon
+vim.api.nvim_create_autocmd({ "BufNew", "BufAdd" }, {
+  callback = function(ev)
+    local harpoon = require "harpoon"
+    local bufname = vim.api.nvim_buf_get_name(ev.buf)
+
+    vim.schedule(function()
+      if bufname and bufname ~= "" and not string.match(bufname, "harpoon") then harpoon:list():add() end
+    end)
+  end,
+})

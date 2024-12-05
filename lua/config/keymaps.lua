@@ -24,6 +24,10 @@ nomap("n", "<leader>qd")
 nomap({ "n", "t" }, "<c-/>")
 nomap({ "n", "t" }, "<c-_>")
 
+-- Disable Buffer changing
+nomap("n", "<S-h>")
+nomap("n", "<S-l>")
+
 map("n", "<leader>q", "<Cmd>confirm q<CR>", { desc = "Quit Window" })
 map("n", "<leader>Q", "<Cmd>confirm qall<CR>", { desc = "Quit all" })
 map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
@@ -56,3 +60,7 @@ map("n", "zp", function() require("ufo").peekFoldedLinesUnderCursor() end, { des
 
 -- LSP
 map("n", "<M-r>l", "<Cmd>LspRestart<CR>", { desc = "LSP Restart" })
+
+-- Harpoon2
+map("n", "H", function() require("harpoon"):list():prev() end)
+map("n", "L", function() require("harpoon"):list():next() end)
