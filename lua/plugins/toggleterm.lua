@@ -2,9 +2,12 @@ return {
   {
     "akinsho/toggleterm.nvim",
     version = "*",
+    event = "VeryLazy",
     config = function()
       require("toggleterm").setup {
-        shade_terminals = true,
+        shade_terminals = false,
+        -- shading_factor = -30,
+        -- shading_ratio = -3,
         highlights = {
           Normal = { link = "Normal" },
           NormalNC = { link = "NormalNC" },
@@ -27,7 +30,6 @@ return {
             end
           end
         end,
-        shading_factor = 2,
         direction = "float",
         float_opts = { border = "rounded" },
       }
@@ -102,6 +104,29 @@ return {
         function() toggle_term_cmd "spf ." end,
         { desc = "Toggle (superfile)", noremap = true, silent = true }
       )
+      -- vim.defer_fn(
+      --   function()
+      --     vim.keymap.set(
+      --       "n",
+      --       "<leader>gg",
+      --       toggle_lazygit,
+      --       { desc = "LazyGit (toggleterm)", noremap = true, silent = true }
+      --     )
+      --   end,
+      --   10
+      -- )
+      -- vim.api.nvim_create_autocmd("User", {
+      --   pattern = "VeryLazy",
+      --   callback = function()
+      --     vim.keymap.set(
+      --       "n",
+      --       "<leader>gg",
+      --       toggle_lazygit,
+      --       { desc = "LazyGit (terminal)", noremap = true, silent = true }
+      --     )
+      --   end,
+      -- })
+      -- vim.keymap.set("n", "<leader>gg", toggle_lazygit, { desc = "LazyGit (terminal)", noremap = true, silent = true })
     end,
   },
 }
