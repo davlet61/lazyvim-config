@@ -4,7 +4,7 @@ return {
   lazy = false,
   opts = {
     terminal = { enabled = false },
-    lazygit = { enabled = false },
+    -- lazygit = { enabled = false },
     win = { enabled = false },
     dashboard = {
       formats = {
@@ -72,7 +72,7 @@ return {
       },
     },
   },
-  keys = {
-    { "<leader>gg", false },
-  },
+  -- keys = {
+  --   { "<leader>gg", false },
+  -- },
 }
