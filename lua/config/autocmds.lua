@@ -131,7 +131,7 @@ vim.api.nvim_create_autocmd("BufDelete", {
 vim.api.nvim_create_user_command("HarpoonAddAll", add_all_buffers_to_harpoon, {})
 
 -- Auto-add new buffers to harpoon
-vim.api.nvim_create_autocmd({ "BufNew", "BufAdd" }, {
+vim.api.nvim_create_autocmd({ "BufNew", "BufAdd", "BufEnter" }, {
   callback = function(ev)
     local harpoon = require "harpoon"
     local bufname = vim.api.nvim_buf_get_name(ev.buf)
