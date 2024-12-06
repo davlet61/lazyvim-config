@@ -158,14 +158,13 @@ local function create_sticky_filename()
   local win_id = vim.api.nvim_get_current_win()
   local width = #filename + 2
 
-  local float_bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(float_bufnr, 0, -1, true, { filename })
+  -- Use a dedicated buffer for the filename window
+  if not vim.g.filename_buf then vim.g.filename_buf = vim.api.nvim_create_buf(false, true) end
 
   local win_width = vim.api.nvim_win_get_width(win_id)
 
   local float_win_config = {
-    relative = "win",
-    win = win_id,
+    relative = "editor",
     row = 0,
     col = win_width - width,
     width = width,
@@ -173,30 +172,33 @@ local function create_sticky_filename()
     style = "minimal",
     focusable = false,
     zindex = 100,
+    border = "none",
   }
 
-  if not vim.w[win_id].filename_win then
-    vim.w[win_id].filename_win = vim.api.nvim_open_win(float_bufnr, false, float_win_config)
-    vim.api.nvim_set_option_value("winblend", 0, { win = vim.w[win_id].filename_win })
-    vim.api.nvim_set_option_value("winhighlight", "Normal:Comment", { win = vim.w[win_id].filename_win })
+  -- Create or update the filename window
+  if not vim.g.filename_win or not vim.api.nvim_win_is_valid(vim.g.filename_win) then
+    vim.g.filename_win = vim.api.nvim_open_win(vim.g.filename_buf, false, float_win_config)
+    vim.api.nvim_set_option_value("winblend", 0, { win = vim.g.filename_win })
+    vim.api.nvim_set_option_value("winhighlight", "Normal:Comment", { win = vim.g.filename_win })
   else
-    vim.api.nvim_win_set_config(vim.w[win_id].filename_win, float_win_config)
-    vim.api.nvim_buf_set_lines(float_bufnr, 0, -1, true, { filename })
+    vim.api.nvim_win_set_config(vim.g.filename_win, float_win_config)
   end
+
+  -- Update the content
+  vim.api.nvim_buf_set_lines(vim.g.filename_buf, 0, -1, true, { filename })
 end
 
-local function cleanup_filename_window()
-  local win_id = vim.api.nvim_get_current_win()
-  if vim.w[win_id].filename_win and vim.api.nvim_win_is_valid(vim.w[win_id].filename_win) then
-    vim.api.nvim_win_close(vim.w[win_id].filename_win, true)
-    vim.w[win_id].filename_win = nil
-  end
-end
-
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "WinScrolled", "VimResized", "BufWritePost" }, {
-  callback = function() create_sticky_filename() end,
+-- Create/update the filename display
+vim.api.nvim_create_autocmd({
+  "BufEnter",
+  "WinScrolled",
+  "VimResized",
+  "BufWritePost",
+  "TextChanged",
+  "TextChangedI",
+}, {
+  callback = create_sticky_filename,
 })
 
-vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave", "BufWinLeave" }, {
-  callback = function() cleanup_filename_window() end,
-})
+-- Initial creation
+vim.schedule(create_sticky_filename)
