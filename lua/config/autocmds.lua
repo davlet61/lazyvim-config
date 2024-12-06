@@ -149,3 +149,54 @@ vim.api.nvim_create_autocmd({ "BufNew", "BufAdd", "BufEnter" }, {
     end)
   end,
 })
+
+local function create_sticky_filename()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":t")
+  if filename == "" then return end
+
+  local win_id = vim.api.nvim_get_current_win()
+  local width = #filename + 2
+
+  local float_bufnr = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(float_bufnr, 0, -1, true, { filename })
+
+  local win_width = vim.api.nvim_win_get_width(win_id)
+
+  local float_win_config = {
+    relative = "win",
+    win = win_id,
+    row = 0,
+    col = win_width - width,
+    width = width,
+    height = 1,
+    style = "minimal",
+    focusable = false,
+    zindex = 100,
+  }
+
+  if not vim.w[win_id].filename_win then
+    vim.w[win_id].filename_win = vim.api.nvim_open_win(float_bufnr, false, float_win_config)
+    vim.api.nvim_set_option_value("winblend", 0, { win = vim.w[win_id].filename_win })
+    vim.api.nvim_set_option_value("winhighlight", "Normal:Comment", { win = vim.w[win_id].filename_win })
+  else
+    vim.api.nvim_win_set_config(vim.w[win_id].filename_win, float_win_config)
+    vim.api.nvim_buf_set_lines(float_bufnr, 0, -1, true, { filename })
+  end
+end
+
+local function cleanup_filename_window()
+  local win_id = vim.api.nvim_get_current_win()
+  if vim.w[win_id].filename_win and vim.api.nvim_win_is_valid(vim.w[win_id].filename_win) then
+    vim.api.nvim_win_close(vim.w[win_id].filename_win, true)
+    vim.w[win_id].filename_win = nil
+  end
+end
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "WinScrolled", "VimResized", "BufWritePost" }, {
+  callback = function() create_sticky_filename() end,
+})
+
+vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave", "BufWinLeave" }, {
+  callback = function() cleanup_filename_window() end,
+})
