@@ -65,7 +65,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
       "NvimTree",
       "snacks_notif",
       "snacks_win_backdrop",
-      "TelescopeResults",
+      -- "TelescopeResults",
       "",
     }
     for _, ignored in ipairs(ignore_filetypes) do
@@ -76,11 +76,18 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
     -- Snacks.notifier.notify("FileType => " .. filetype, "info")
   end,
 })
+
 local function normalize_path(path)
-  -- Get current working directory
   local cwd = vim.fn.getcwd()
-  -- Make path relative to cwd
-  return vim.fn.fnamemodify(path, ":p"):gsub(cwd .. "/", "")
+  -- Convert both paths to absolute paths and normalize them
+  local abs_path = vim.fn.fnamemodify(path, ":p")
+  local abs_cwd = vim.fn.fnamemodify(cwd, ":p")
+
+  -- Remove trailing slash from cwd if it exists
+  abs_cwd = abs_cwd:gsub("/$", "")
+
+  local relative_path = abs_path:gsub("^" .. vim.pesc(abs_cwd) .. "/?", "")
+  return relative_path
 end
 
 local function add_all_buffers_to_harpoon()
@@ -131,8 +138,8 @@ vim.api.nvim_create_autocmd({ "BufNew", "BufAdd" }, {
 
     vim.schedule(function()
       if
-        vim.api.nvim_buf_is_valid(ev.buf)
-        and bufname
+        -- vim.api.nvim_buf_is_valid(ev.buf)
+        bufname
         and bufname ~= ""
         and not string.match(bufname, "harpoon")
         and vim.api.nvim_get_option_value("buftype", { buf = ev.buf }) ~= "terminal"
