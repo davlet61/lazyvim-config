@@ -22,6 +22,10 @@ local function create_sticky_filename()
   local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":t")
   if filename == "" then return end
 
+  -- Check if file has an extension
+  local extension = vim.fn.fnamemodify(filename, ":e")
+  if extension == "" then return end -- Skip files without extensions
+
   local icon, icon_color = get_file_icon(filename)
   local display_text = string.format("%s %s", icon, filename)
   local width = vim.fn.strdisplaywidth(display_text) + 2
