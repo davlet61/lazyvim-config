@@ -6,6 +6,7 @@ return {
     terminal = { enabled = false },
     -- lazygit = { enabled = false },
     win = { enabled = false },
+    scroll = { enabled = false },
     dashboard = {
       formats = {
         header = function(item, ctx)
