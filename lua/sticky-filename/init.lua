@@ -7,12 +7,13 @@ M.state = {
 }
 
 local function get_file_icon(filename)
-  local has_devicons, devicons = pcall(require, "nvim-web-devicons")
-  if has_devicons then
-    local icon, icon_color = devicons.get_icon_color(filename, vim.fn.fnamemodify(filename, ":e"))
-    if icon then return icon, icon_color end
+  local has_mini_icons, mini_icons = pcall(require, "mini.icons")
+  if has_mini_icons then
+    -- Get both icon and highlight group directly from mini.icons.get()
+    local icon, hl = mini_icons.get("file", filename)
+    return icon, hl
   end
-  return "", "#6d8086"
+  return "", "#6d8086" -- default fallback
 end
 
 local function create_sticky_filename()
