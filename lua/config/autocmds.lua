@@ -12,7 +12,43 @@ local function get_hlgroup(name)
   }
 end
 
-local function setup_telescope_highlights()
+-- local function setup_telescope_highlights()
+--   local normal = get_hlgroup "Normal"
+--   local fg, bg = normal.fg, normal.bg
+--   local green = get_hlgroup("String").fg
+--   local red = get_hlgroup("Error").fg
+--   local float_bg = "#171717"
+--   local bg_alt = "#404040"
+--
+--   local highlights = {
+--     TelescopeBorder = { fg = bg_alt, bg = float_bg },
+--     TelescopeNormal = { bg = float_bg },
+--     TelescopePreviewBorder = { fg = float_bg, bg = float_bg },
+--     TelescopePreviewNormal = { bg = float_bg },
+--     TelescopePreviewTitle = { fg = bg, bg = green },
+--     TelescopePromptBorder = { fg = bg_alt, bg = bg_alt },
+--     TelescopePromptNormal = { fg = fg, bg = bg_alt },
+--     TelescopePromptPrefix = { fg = red, bg = bg_alt },
+--     TelescopePromptTitle = { fg = float_bg, bg = red },
+--     TelescopeResultsBorder = { fg = float_bg, bg = float_bg },
+--     TelescopeResultsNormal = { bg = float_bg },
+--     TelescopeResultsTitle = { fg = float_bg, bg = float_bg },
+--   }
+--
+--   for group, colors in pairs(highlights) do
+--     vim.api.nvim_set_hl(0, group, colors)
+--   end
+-- end
+--
+-- -- Set up an autocmd to apply these highlights when a colorscheme changes
+-- vim.api.nvim_create_autocmd("ColorScheme", {
+--   callback = setup_telescope_highlights,
+-- })
+--
+-- -- Also call the function immediately to apply the highlights on startup
+-- setup_telescope_highlights()
+
+local function setup_fzf_highlights()
   local normal = get_hlgroup "Normal"
   local fg, bg = normal.fg, normal.bg
   local green = get_hlgroup("String").fg
@@ -21,18 +57,29 @@ local function setup_telescope_highlights()
   local bg_alt = "#404040"
 
   local highlights = {
-    TelescopeBorder = { fg = bg_alt, bg = float_bg },
-    TelescopeNormal = { bg = float_bg },
-    TelescopePreviewBorder = { fg = float_bg, bg = float_bg },
-    TelescopePreviewNormal = { bg = float_bg },
-    TelescopePreviewTitle = { fg = bg, bg = green },
-    TelescopePromptBorder = { fg = bg_alt, bg = bg_alt },
-    TelescopePromptNormal = { fg = fg, bg = bg_alt },
-    TelescopePromptPrefix = { fg = red, bg = bg_alt },
-    TelescopePromptTitle = { fg = float_bg, bg = red },
-    TelescopeResultsBorder = { fg = float_bg, bg = float_bg },
-    TelescopeResultsNormal = { bg = float_bg },
-    TelescopeResultsTitle = { fg = float_bg, bg = float_bg },
+    FzfLuaBorder = { fg = bg_alt, bg = float_bg },
+    FzfLuaNormal = { bg = float_bg },
+
+    -- Preview window
+    FzfLuaPreviewBorder = { fg = float_bg, bg = float_bg },
+    FzfLuaPreviewNormal = { bg = float_bg },
+    FzfLuaPreviewTitle = { fg = bg, bg = green },
+
+    -- Prompt area
+    FzfLuaPromptBorder = { fg = bg_alt, bg = bg_alt },
+    FzfLuaPromptNormal = { fg = fg, bg = bg_alt },
+    FzfLuaPromptPrefix = { fg = red, bg = bg_alt },
+    FzfLuaFzfPrompt = { fg = "#DD7878", bold = true },
+
+    -- Results area
+    FzfLuaResultsBorder = { fg = float_bg, bg = float_bg },
+    FzfLuaResultsNormal = { bg = float_bg },
+    FzfLuaResultsTitle = { fg = float_bg, bg = float_bg },
+
+    -- Matches and current selection
+    -- FzfLuaCursor = { fg = fg, bg = bg_alt },
+    FzfLuaSelected = { fg = green, bg = float_bg },
+    FzfLuaMatch = { fg = red, bold = true },
   }
 
   for group, colors in pairs(highlights) do
@@ -42,11 +89,11 @@ end
 
 -- Set up an autocmd to apply these highlights when a colorscheme changes
 vim.api.nvim_create_autocmd("ColorScheme", {
-  callback = setup_telescope_highlights,
+  callback = setup_fzf_highlights,
 })
 
 -- Also call the function immediately to apply the highlights on startup
-setup_telescope_highlights()
+setup_fzf_highlights()
 
 -- Send filetype to title (for Wezterm)
 vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
