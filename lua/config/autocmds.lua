@@ -185,8 +185,8 @@ vim.api.nvim_create_autocmd({ "BufNew", "BufAdd", "BufEnter" }, {
 
     vim.schedule(function()
       if
-        -- vim.api.nvim_buf_is_valid(ev.buf)
-        bufname
+        vim.api.nvim_buf_is_valid(ev.buf)
+        and bufname
         and bufname ~= ""
         and not string.match(bufname, "harpoon")
         and vim.api.nvim_get_option_value("buftype", { buf = ev.buf }) ~= "terminal"
