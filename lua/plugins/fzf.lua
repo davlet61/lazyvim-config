@@ -17,4 +17,20 @@ return {
     end
     require("fzf-lua").setup(opts)
   end,
+  keys = {
+    { "<leader>sw", false },
+    { "<leader>sw", mode = "v", false },
+    {
+      "<leader>sw",
+      function()
+        if vim.fn.mode() == "v" or vim.fn.mode() == "V" then
+          LazyVim.pick "grep_visual"()
+        else
+          LazyVim.pick "grep_cword"()
+        end
+      end,
+      desc = "Word/Selection (Root Dir)",
+      mode = { "n", "v" },
+    },
+  },
 }
