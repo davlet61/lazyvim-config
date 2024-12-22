@@ -1,6 +1,7 @@
 return {
   "linux-cultist/venv-selector.nvim",
   branch = "regexp", -- Use this branch for the new version
+  enabled = true, -- until fzf selector get implemented
   opts = {
     settings = {
       search = {
