@@ -73,7 +73,7 @@ return {
       },
     },
   },
-  -- keys = {
-  --   { "<leader>gg", false },
-  -- },
+  keys = {
+    { "<leader>.", false },
+  },
 }

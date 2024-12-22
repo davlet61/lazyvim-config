@@ -63,3 +63,6 @@ map("n", "<M-r>l", "<Cmd>LspRestart<CR>", { desc = "LSP Restart" })
 -- Harpoon2
 map("n", "H", function() require("harpoon"):list():prev() end)
 map("n", "L", function() require("harpoon"):list():next() end)
+
+-- Oil
+map("n", "<leader>e", function() vim.cmd((vim.bo.filetype == "oil") and "bd" or "Oil") end, { desc = "Toggle Oil" })

@@ -9,9 +9,12 @@ M.state = {
 local function get_file_icon(filename)
   local has_mini_icons, mini_icons = pcall(require, "mini.icons")
   if has_mini_icons then
-    -- Get both icon and highlight group directly from mini.icons.get()
     local icon, hl = mini_icons.get("file", filename)
-    return icon, hl
+    -- Try to get the highlight definition
+    local ok, hl_def = pcall(vim.api.nvim_get_hl, 0, { name = hl })
+    if ok and hl_def.fg then return icon, string.format("#%06x", hl_def.fg) end
+    -- Fallback to a default color if the highlight group doesn't exist
+    return icon, "#6d8086"
   end
   return "", "#6d8086" -- default fallback
 end
