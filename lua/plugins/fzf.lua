@@ -1,7 +1,17 @@
 return {
   "ibhagwan/fzf-lua",
   cmd = "FzfLua",
-  config = function(_, opts)
+  opts = function(_, opts)
+    local fzf = require "fzf-lua"
+    local config = fzf.config
+
+    config.defaults.keymap.fzf["ctrl-b"] = "half-page-up"
+    config.defaults.keymap.fzf["ctrl-f"] = "half-page-down"
+    config.defaults.keymap.fzf["ctrl-d"] = "preview-page-down"
+    config.defaults.keymap.fzf["ctrl-u"] = "preview-page-up"
+    config.defaults.keymap.builtin["<c-d>"] = "preview-page-down"
+    config.defaults.keymap.builtin["<c-u>"] = "preview-page-up"
+
     if opts[1] == "default-title" then
       -- use the same prompt for all pickers for profile `default-title` and
       -- profiles that use `default-title` as base profile
@@ -15,17 +25,7 @@ return {
       opts = vim.tbl_deep_extend("force", fix(require "fzf-lua.profiles.default-title"), opts)
       opts[1] = nil
     end
-    opts = vim.tbl_deep_extend("force", opts or {}, {
-      winopts = {
-        preview = {
-          scrolling = {
-            ["<C-u>"] = "half-page-up",
-            ["<C-d>"] = "half-page-down",
-          },
-        },
-      },
-    })
-    require("fzf-lua").setup(opts)
+    fzf.setup(opts)
   end,
   keys = {
     { "<leader>sw", false },
