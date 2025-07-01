@@ -1,4 +1,7 @@
 return {
+  -- Harpoon2
+  -- map("n", "H", function() require("harpoon"):list():prev() end)
+  -- map("n", "L", function() require("harpoon"):list():next() end)
 
   -- local function add_all_buffers_to_harpoon()
   --   local harpoon = require "harpoon"

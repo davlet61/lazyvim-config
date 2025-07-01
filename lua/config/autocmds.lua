@@ -198,3 +198,30 @@ setup_fzf_highlights()
 -- })
 --
 -- vim.schedule(create_sticky_filename)
+vim.api.nvim_set_hl(0, "BufferManagerModified", { fg = "#0000af" })
+
+-------------------
+-- CUSTOM MACROS --
+-------------------
+local esc = vim.api.nvim_replace_termcodes("<Esc>", true, true, true)
+local line_expr = vim.api.nvim_replace_termcodes("<C-r>=line('.')<CR>", true, true, true)
+
+vim.api.nvim_create_augroup("SmartLogMacros", { clear = true })
+
+-- Python version
+vim.api.nvim_create_autocmd("Filetype", {
+  group = "SmartLogMacros",
+  pattern = { "python" },
+  callback = function()
+    vim.fn.setreg("p", 'yiw%oprint(f"[Line:' .. line_expr .. "] " .. esc .. "pa => {" .. esc .. 'pa}")' .. esc)
+  end,
+})
+
+-- JavaScript/TypeScript version
+vim.api.nvim_create_autocmd("Filetype", {
+  group = "SmartLogMacros",
+  pattern = { "javascript", "typescript", "javascriptreact", "typescriptreact", "jsx", "tsx", "vue" },
+  callback = function()
+    vim.fn.setreg("l", 'yiw%oconsole.log("[Line:' .. line_expr .. "] " .. esc .. 'pa => ", ' .. esc .. "p" .. esc)
+  end,
+})
