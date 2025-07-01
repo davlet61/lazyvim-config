@@ -1,0 +1,72 @@
+return {
+
+  -- local function add_all_buffers_to_harpoon()
+  --   local harpoon = require "harpoon"
+  --
+  --   -- Get list of all buffers
+  --   local buffers = vim.api.nvim_list_bufs()
+  --
+  --   for _, buf in ipairs(buffers) do
+  --     -- Check if buffer is loaded and valid
+  --     if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_is_valid(buf) then
+  --       local bufname = vim.api.nvim_buf_get_name(buf)
+  --       -- Only add if it's a real file and not a harpoon UI buffer
+  --       if bufname and bufname ~= "" and not string.match(bufname, "harpoon") then harpoon:list():add() end
+  --     end
+  --   end
+  -- end
+
+  -- Function to normalize paths (ensure paths are consistent)
+  -- local function normalize_path(path) return vim.fn.fnamemodify(path, ":p") end
+
+  -- Create autocmd to remove deleted buffers from Harpoon
+  -- vim.api.nvim_create_autocmd("BufDelete", {
+  --   callback = function(ev)
+  --     local harpoon = require "harpoon"
+  --     local bufname = vim.api.nvim_buf_get_name(ev.buf)
+  --
+  --     -- Check if the buffer has a valid name and isn't a Harpoon buffer
+  --     if bufname and bufname ~= "" and not string.match(bufname, "harpoon") then
+  --       local normalized_bufname = normalize_path(bufname)
+  --       local list = harpoon:list()
+  --       local items = list:display()
+  --
+  --       -- Iterate through the Harpoon list and remove the matching item
+  --       for idx, item in ipairs(items) do
+  --         if normalize_path(item) == normalized_bufname then
+  --           list:remove_at(idx) -- Remove the item by its index
+  --           break
+  --         end
+  --       end
+  --     end
+  --   end,
+  -- })
+
+  -- Create a command to call the add function
+  -- vim.api.nvim_create_user_command("HarpoonAddAll", add_all_buffers_to_harpoon, {})
+
+  -- Auto-add new buffers to harpoon
+  -- vim.api.nvim_create_autocmd({ "BufNew", "BufAdd", "BufEnter" }, {
+  --   callback = function(ev)
+  --     local harpoon = require "harpoon"
+  --     local bufname = vim.api.nvim_buf_get_name(ev.buf)
+  --
+  --     vim.schedule(function()
+  --       -- Check if the buffer is valid and has a name
+  --       if not vim.api.nvim_buf_is_valid(ev.buf) or not bufname or bufname == "" then return end
+  --
+  --       -- Check if the buffer type is one to avoid
+  --       local buftype = vim.api.nvim_get_option_value("buftype", { buf = ev.buf })
+  --       local filetype = vim.api.nvim_get_option_value("filetype", { buf = ev.buf })
+  --
+  --       if buftype == "terminal" or filetype == "oil" then return end
+  --
+  --       -- Check if the buffer name matches any patterns to avoid
+  --       if string.match(bufname, "harpoon") then return end
+  --
+  --       -- If all checks pass, add the buffer to Harpoon
+  --       harpoon:list():add()
+  --     end)
+  --   end,
+  -- })
+}

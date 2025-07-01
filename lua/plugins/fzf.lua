@@ -15,6 +15,16 @@ return {
       opts = vim.tbl_deep_extend("force", fix(require "fzf-lua.profiles.default-title"), opts)
       opts[1] = nil
     end
+    opts = vim.tbl_deep_extend("force", opts or {}, {
+      winopts = {
+        preview = {
+          scrolling = {
+            ["<C-u>"] = "half-page-up",
+            ["<C-d>"] = "half-page-down",
+          },
+        },
+      },
+    })
     require("fzf-lua").setup(opts)
   end,
   keys = {
